@@ -1,0 +1,17 @@
+clc;
+close all;
+C = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]; % Concentration (mol/L)
+r = [0.015, 0.028, 0.040, 0.055, 0.070, 0.088]; % Reaction rate
+C3 = C.^3;
+model = @(b, x) b(1)*x.^2 + b(2)*x + b(3);
+initialParams = [1, 1, 1];
+options = optimoptions("lsqcurvefit", "Display", "off");
+[params, resnorm] = lsqcurvefit(model, initialParams, C3, r, [], [], options);
+y_fit = model(params, C3);
+figure;
+plot(C3, r, 'o');
+hold on;
+plot(C3, y_fit, "b-", "LineWidth", 2);
+xlabel('C');
+ylabel('r');
+grid on;
